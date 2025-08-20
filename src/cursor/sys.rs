@@ -3,6 +3,8 @@
 #[cfg(unix)]
 #[cfg(feature = "events")]
 pub use self::unix::position;
+#[cfg(target_arch = "wasm32")]
+pub use self::wasm::position;
 #[cfg(windows)]
 #[cfg(feature = "events")]
 pub use self::windows::position;
@@ -18,3 +20,10 @@ pub(crate) mod windows;
 #[cfg(unix)]
 #[cfg(feature = "events")]
 pub(crate) mod unix;
+
+#[cfg(target_arch = "wasm32")]
+pub(crate) mod wasm {
+    pub fn position() -> std::io::Result<(u16, u16)> {
+        unimplemented!()
+    }
+}

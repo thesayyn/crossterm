@@ -2,8 +2,11 @@ use std::{collections::vec_deque::VecDeque, io, time::Duration};
 
 #[cfg(unix)]
 use crate::event::source::unix::UnixInternalEventSource;
+#[cfg(target_arch = "wasm32")]
+use crate::event::source::wasm::WasmEventSource;
 #[cfg(windows)]
 use crate::event::source::windows::WindowsEventSource;
+
 #[cfg(feature = "event-stream")]
 use crate::event::sys::Waker;
 use crate::event::{
@@ -23,6 +26,8 @@ impl Default for InternalEventReader {
         let source = WindowsEventSource::new();
         #[cfg(unix)]
         let source = UnixInternalEventSource::new();
+        #[cfg(target_arch = "wasm32")]
+        let source = WasmEventSource::new();
 
         let source = source.ok().map(|x| Box::new(x) as Box<dyn EventSource>);
 

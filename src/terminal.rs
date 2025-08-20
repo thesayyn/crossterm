@@ -114,6 +114,11 @@ pub fn is_raw_mode_enabled() -> io::Result<bool> {
     {
         sys::is_raw_mode_enabled()
     }
+
+    #[cfg(target_arch = "wasm32")]
+    {
+        sys::is_raw_mode_enabled()
+    }
 }
 
 /// Enables raw mode.

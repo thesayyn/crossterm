@@ -9,6 +9,36 @@ pub(crate) mod unix;
 #[cfg(windows)]
 pub(crate) mod windows;
 
+#[cfg(target_arch = "wasm32")]
+pub(crate) mod wasm {
+    #[cfg(feature = "event-stream")]
+    use super::Waker;
+    use super::{EventSource, InternalEvent};
+    use std::time::Duration;
+
+    pub struct WasmEventSource;
+
+    impl WasmEventSource {
+        pub fn new() -> std::io::Result<Self> {
+            Ok(WasmEventSource)
+        }
+    }
+
+    impl EventSource for WasmEventSource {
+        fn try_read(
+            &mut self,
+            timeout: Option<Duration>,
+        ) -> std::io::Result<Option<InternalEvent>> {
+            unimplemented!()
+        }
+
+        #[cfg(feature = "event-stream")]
+        fn waker(&self) -> Waker {
+            unimplemented!()
+        }
+    }
+}
+
 /// An interface for trying to read an `InternalEvent` within an optional `Duration`.
 pub(crate) trait EventSource: Sync + Send {
     /// Tries to read an `InternalEvent` within the given duration.

@@ -59,6 +59,11 @@ impl Filter for EventFilter {
     fn eval(&self, _: &InternalEvent) -> bool {
         true
     }
+
+    #[cfg(target_arch = "wasm32")]
+    fn eval(&self, _: &InternalEvent) -> bool {
+        unimplemented!()
+    }
 }
 
 #[cfg(test)]
